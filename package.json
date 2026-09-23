@@ -1,0 +1,19 @@
+{
+  "name": "fasttrack",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Plataforma de dropshipping FastTrack em React e JavaScript.",
+  "packageManager": "pnpm@11.19.0",
+  "scripts": {
+    "dev": "pnpm --parallel --filter @fasttrack/web --filter @fasttrack/api dev",
+    "dev:web": "pnpm --filter @fasttrack/web dev",
+    "dev:api": "pnpm --filter @fasttrack/api dev",
+    "build": "pnpm --filter @fasttrack/web build",
+    "preview:web": "pnpm --filter @fasttrack/web preview",
+    "start:api": "pnpm --filter @fasttrack/api start"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
