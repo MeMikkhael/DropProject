@@ -1,31 +1,21 @@
 import React, { useEffect, useState } from "react";
+import { Admin } from "./pages/Admin.jsx";
 
-// 1) Dados de exemplo para mostrar produtos na tela
-const featuredProducts = [
-  {
-    name: "Hub USB-C 7 em 1",
-    price: "R$ 149,90",
-    tag: "Produto exemplo",
-    source: "Cadastro manual"
-  },
-  {
-    name: "Fone Bluetooth compacto",
-    price: "R$ 89,90",
-    tag: "Produto exemplo",
-    source: "Recomendado futuro"
-  },
-  {
-    name: "Suporte articulado para notebook",
-    price: "R$ 119,90",
-    tag: "Produto exemplo",
-    source: "Cadastro manual"
-  }
-];
-
-// 2) URL padrão do backend para não quebrar se a variável de ambiente não existir
+// URL padrão do backend para não quebrar se a variável de ambiente não existir
 const DEFAULT_API_URL = "http://localhost:3000";
 
-// 3) Função para montar a mensagem do status da API
+// Faz uma requisição e transforma a resposta em JSON.
+async function fetchJson(url) {
+  const response = await fetch(url);
+
+  if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+  }
+
+  return response.json();
+}
+
+// Função para montar a mensagem do status da API
 function getOverviewStatus(overview, loading, error) {
   if (loading) {
     return "Conectando ao backend...";
@@ -38,7 +28,7 @@ function getOverviewStatus(overview, loading, error) {
   return `${overview?.market ?? "Brasil"} · ${overview?.currency ?? "BRL"}`;
 }
 
-// 4) Função para montar o resumo de pagamento vindo do backend
+// Função para montar o resumo de pagamento vindo do backend
 function getPaymentSummary(overview) {
   if (!overview) {
     return "Produtos recomendados por scraper com aprovacao manual";
@@ -47,52 +37,68 @@ function getPaymentSummary(overview) {
   return `${overview.paymentProvider} · ${overview.phase}`;
 }
 
-// 5) Componente principal da aplicação
+// Componente principal da aplicação
 export function App() {
+  // A rota do painel e separada da pagina publica da loja.
+  if (window.location.pathname === "/admin") {
+    return <Admin />;
+  }
+
   // Estado para guardar os dados do backend
   const [overview, setOverview] = useState(null);
+  const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [productsLoading, setProductsLoading] = useState(true);
   const [error, setError] = useState("");
+  const [productsError, setProductsError] = useState("");
 
-  // 6) Busca os dados do backend quando a página abre
+  // Busca a overview e, depois que ela chega, busca os produtos.
   useEffect(() => {
     const apiUrl = import.meta.env.VITE_API_URL ?? DEFAULT_API_URL;
 
-    fetch(`${apiUrl}/api/overview`)
-      .then(async (response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}`);
-        }
+    async function loadData() {
+      try {
+        const overviewData = await fetchJson(`${apiUrl}/api/overview`);
 
-        return response.json();
-      })
-      .then((data) => {
-        setOverview(data);
-      })
-      .catch(() => {
-        setError("Não foi possível conectar com a API.");
-      })
-      .finally(() => {
+        setOverview(overviewData);
         setLoading(false);
-      });
+
+        // Este segundo fetch só começa depois que a overview foi carregada.
+        try {
+          const productsData = await fetchJson(`${apiUrl}/api/products`);
+
+          setProducts(Array.isArray(productsData) ? productsData : []);
+        } catch {
+          setProductsError("Não foi possível carregar os produtos.");
+        } finally {
+          setProductsLoading(false);
+        }
+      } catch {
+        setError("Não foi possível conectar com a API.");
+        setLoading(false);
+        setProductsLoading(false);
+      }
+    }
+
+    loadData();
   }, []);
 
-  // 7) Mensagens prontas para exibir na tela
+  // Mensagens prontas para exibir na tela
   const overviewStatus = getOverviewStatus(overview, loading, error);
   const paymentSummary = getPaymentSummary(overview);
 
   // 8) Estrutura visual da página
   return (
+
     <main className="app-shell">
       <header className="topbar">
         <div>
           <strong className="brand">FastTrack</strong>
           <span className="subtitle">Dropshipping nacional em construcao</span>
         </div>
-
         <nav className="nav">
           <a href="#loja">Loja</a>
-          <a href="#admin">Admin</a>
+          <a href="/admin">Admin</a>
           <a href="#seguranca">Seguranca</a>
         </nav>
       </header>
@@ -110,7 +116,7 @@ export function App() {
             <a className="primary-action" href="#produtos">
               Ver produtos
             </a>
-            <a className="secondary-action" href="#admin">
+            <a className="secondary-action" href="/admin">
               Ver painel
             </a>
           </div>
@@ -137,44 +143,35 @@ export function App() {
       <section className="section" id="produtos">
         <div className="section-heading">
           <p className="eyebrow">Catalogo</p>
-          <h2>Produtos de exemplo</h2>
+          <h2>Produtos da loja</h2>
         </div>
 
         <div className="product-grid">
-          {featuredProducts.map((product) => (
-            <article className="product-card" key={product.name}>
-              <span>{product.tag}</span>
-              <h3>{product.name}</h3>
-              <strong>{product.price}</strong>
-              <p>{product.source}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+          {productsLoading && <p>Carregando produtos...</p>}
 
-      <section className="admin-preview" id="admin">
-        <div>
-          <p className="eyebrow">Painel admin</p>
-          <h2>Aprovacao antes da publicacao</h2>
-          <p>
-            A area administrativa futura tera uma aba de produtos recomendados,
-            onde voce podera abrir o link original, conferir preco/frete e aprovar
-            apenas o que fizer sentido para a FastTrack.
-          </p>
-        </div>
+          {!productsLoading && productsError && <p>{productsError}</p>}
 
-        <div className="metric-list">
-          <div>
-            <span className="icon-dot">V</span>
-            <span>Vendas</span>
-            <strong>Fase futura</strong>
-          </div>
+          {!productsLoading && !productsError && products.length === 0 && (
+            <p>Nenhum produto cadastrado ainda.</p>
+          )}
 
-          <div>
-            <span className="icon-dot">P</span>
-            <span>Recomendados</span>
-            <strong>Fase scraper</strong>
-          </div>
+          {!productsLoading &&
+            !productsError &&
+            products.map((product, index) => (
+              <article
+                className="product-card"
+                key={product.id ?? product.name ?? index}
+              >
+                <span>{product.tag ?? "Produto"}</span>
+                <h3>{product.name ?? product.title ?? "Produto sem nome"}</h3>
+                <strong>{product.price ?? "Preço não informado"}</strong>
+                <p>
+                  {product.description ??
+                    product.source ??
+                    "Cadastro no banco de dados"}
+                </p>
+              </article>
+            ))}
         </div>
       </section>
 

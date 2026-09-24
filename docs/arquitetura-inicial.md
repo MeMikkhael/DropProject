@@ -1,6 +1,9 @@
 # FastTrack - Arquitetura inicial
 
-Este documento trata o conteudo de `org drp.md` como briefing do projeto. Ele nao implementa a aplicacao ainda. A etapa atual e analisar, propor arquitetura e levantar decisoes que precisam de aprovacao antes do primeiro codigo.
+Este documento registra a arquitetura proposta e as decisoes que continuam
+valendo. O projeto ja possui uma primeira implementacao funcional; por isso,
+algumas secoes abaixo representam o futuro e outras descrevem o que ja foi
+construido.
 
 ## 1. Avaliacao da ideia
 
@@ -121,11 +124,14 @@ Estas decisoes foram adicionadas apos as respostas do usuario.
 - Servidor: primeira versao local, no PC, antes de publicar na internet.
 - Exposicao futura: estudar Cloudflare Free com Cloudflare Tunnel.
 - Banco de dados recomendado: PostgreSQL desde o inicio, com explicacoes durante o desenvolvimento.
-- Ferramenta de banco recomendada: Prisma, por equilibrar produtividade, seguranca e clareza para evoluir o projeto.
+- Ferramenta de banco atual: `pg` com SQL parametrizado. Prisma continua como
+  opcao futura para migrations e uma camada de acesso mais organizada.
 - Painel admin: comeca com um unico administrador, mas modelado para permitir perfis/permissoes depois.
 - Emissao fiscal: ainda nao definida; tratar como trilha futura e manter pedidos bem registrados para facilitar emissao externa ou integracao futura.
 - Backup: diario, porque pedidos e produtos mudam com frequencia.
-- Scraping: deve existir um primeiro scraper real no projeto, mas com publicacao manual. O scraper nao publica direto na loja; ele alimenta uma aba de produtos recomendados.
+- Integracao com Mercado Livre: comecaremos por um provider simulado, porque o
+  OAuth depende de uma URL HTTPS. O provider real entrara depois, mantendo o
+  mesmo formato normalizado.
 
 ## 4.2 Fluxo aprovado para produtos recomendados por scraping
 
@@ -142,6 +148,24 @@ A ideia do MVP nao sera "scraper publica produto automaticamente". O fluxo corre
 Essa decisao protege contra produtos errados, preco desatualizado, frete mal calculado e publicacao indevida.
 
 Importante: antes de implementar scraper para Mercado Livre ou AliExpress, precisamos verificar API oficial, termos de uso e alternativas autorizadas. Se a API oficial atender, ela deve ser preferida ao scraping.
+
+### Implementacao atual do fluxo
+
+O fluxo inicial ja possui a tabela `product_recommendations` e as seguintes
+rotas:
+
+- `GET /api/recommendations`: lista pendencias;
+- `POST /api/recommendations`: cadastra resultado do scraper ou formulario;
+- `POST /api/recommendations/:id/approve`: cria `products` e aprova;
+- `POST /api/recommendations/:id/reject`: rejeita sem publicar.
+
+O sistema limita pendencias a 100 registros e remove pendencias com mais de 30
+dias. A publicacao exige revisao humana.
+
+Nesta etapa, a coleta esta simulada em
+`apps/api/src/services/mercadoLivreProvider.js`. O calculo de preco esta
+separado em `apps/api/src/services/pricing.js`, e a chave de duplicidade
+combina a fonte com o identificador do item ou a URL normalizada.
 
 ## 4.3 Emissao fiscal e MEI
 

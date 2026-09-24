@@ -226,6 +226,323 @@ h2 {
   padding-bottom: 80px;
 }
 
+.admin-page {
+  margin: 0 auto;
+  max-width: 1160px;
+  padding: 34px 24px 88px;
+}
+
+.admin-header {
+  align-items: end;
+  border-bottom: 1px solid #ead5c5;
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  padding-bottom: 28px;
+}
+
+.back-link {
+  color: #a84121;
+  display: inline-block;
+  font-size: 0.86rem;
+  font-weight: 800;
+  margin-bottom: 32px;
+}
+
+.admin-header h1 {
+  font-size: clamp(2.5rem, 6vw, 5rem);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  margin: 8px 0 16px;
+}
+
+.admin-intro {
+  color: #765545;
+  line-height: 1.65;
+  margin: 0;
+  max-width: 580px;
+}
+
+.admin-stat {
+  background: #2b1810;
+  border-radius: 8px;
+  color: #fff8ef;
+  min-width: 150px;
+  padding: 18px;
+}
+
+.admin-stat span,
+.admin-stat small {
+  display: block;
+  opacity: 0.72;
+}
+
+.admin-stat strong {
+  display: block;
+  font-size: 2.5rem;
+  line-height: 1;
+  margin: 8px 0;
+}
+
+.admin-grid {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1.3fr) minmax(260px, 0.7fr);
+  margin-top: 28px;
+}
+
+.admin-panel {
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid #efd3c2;
+  border-radius: 8px;
+  padding: 24px;
+}
+
+.panel-heading,
+.admin-list-heading,
+.recommendation-header,
+.recommendation-footer {
+  align-items: start;
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.panel-heading h2,
+.admin-list-heading h2 {
+  font-size: 1.8rem;
+  margin-top: 6px;
+}
+
+.panel-mark {
+  color: #b7431f;
+  font-size: 0.8rem;
+  font-weight: 900;
+}
+
+.admin-help {
+  background: #f9eadc;
+}
+
+.admin-help h2 {
+  font-size: 2rem;
+  margin: 8px 0 16px;
+}
+
+.admin-help p:not(.eyebrow) {
+  color: #765545;
+  line-height: 1.65;
+}
+
+.workflow-list {
+  border-top: 1px solid #e5c8b5;
+  display: grid;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 18px;
+}
+
+.workflow-list span {
+  align-items: center;
+  display: flex;
+  gap: 10px;
+  font-weight: 800;
+}
+
+.workflow-list b {
+  color: #b7431f;
+  font-size: 0.75rem;
+}
+
+.admin-form {
+  display: grid;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.admin-form label {
+  color: #604234;
+  display: grid;
+  font-size: 0.82rem;
+  font-weight: 800;
+  gap: 7px;
+}
+
+.admin-form input,
+.admin-form textarea {
+  background: #fffdfb;
+  border: 1px solid #dfc2b0;
+  border-radius: 6px;
+  color: #2b1810;
+  font: inherit;
+  min-height: 42px;
+  padding: 10px 12px;
+  width: 100%;
+}
+
+.admin-form textarea {
+  min-height: 88px;
+  resize: vertical;
+}
+
+.admin-form input:focus,
+.admin-form textarea:focus {
+  border-color: #d94f24;
+  outline: 3px solid rgba(217, 79, 36, 0.14);
+}
+
+.form-row {
+  display: grid;
+  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.form-actions {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.admin-button {
+  border: 0;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.86rem;
+  font-weight: 900;
+  min-height: 40px;
+  padding: 10px 14px;
+}
+
+.admin-button:disabled {
+  cursor: wait;
+  opacity: 0.55;
+}
+
+.admin-button.primary {
+  background: #d94f24;
+  color: #fff;
+}
+
+.admin-button.secondary {
+  background: transparent;
+  border: 1px solid #d9b5a1;
+  color: #4a291c;
+}
+
+.admin-button.approve {
+  background: #2f7354;
+  color: #fff;
+}
+
+.admin-button.reject {
+  background: transparent;
+  border: 1px solid #d9b5a1;
+  color: #9e3c22;
+}
+
+.admin-alert {
+  background: #fff0ea;
+  border-left: 4px solid #b7431f;
+  color: #8e321b;
+  margin: 20px 0 0;
+  padding: 12px 14px;
+}
+
+.recommendations-section {
+  margin-top: 52px;
+}
+
+.admin-list-heading {
+  align-items: end;
+  margin-bottom: 18px;
+}
+
+.queue-label {
+  color: #a84121;
+  font-size: 0.85rem;
+  font-weight: 900;
+}
+
+.recommendation-list {
+  display: grid;
+  gap: 14px;
+}
+
+.recommendation-card {
+  background: #fff;
+  border: 1px solid #efd3c2;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.source-badge,
+.recommendation-status {
+  color: #b7431f;
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.recommendation-status {
+  color: #765545;
+}
+
+.recommendation-card h3 {
+  font-size: 1.35rem;
+  margin: 7px 0 0;
+}
+
+.recommendation-description {
+  color: #765545;
+  line-height: 1.6;
+  margin: 18px 0;
+}
+
+.recommendation-data {
+  border-bottom: 1px solid #f0ddd0;
+  border-top: 1px solid #f0ddd0;
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  padding: 14px 0;
+}
+
+.recommendation-data div {
+  display: grid;
+  gap: 5px;
+}
+
+.recommendation-data span,
+.recommendation-footer > span {
+  color: #8e6d5c;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.recommendation-data strong {
+  color: #2b1810;
+  font-size: 1rem;
+}
+
+.recommendation-data .highlight strong {
+  color: #b7431f;
+}
+
+.recommendation-footer {
+  align-items: center;
+  margin-top: 16px;
+}
+
+.empty-state {
+  background: #fff;
+  border: 1px dashed #d9b5a1;
+  color: #765545;
+  padding: 24px;
+}
+
 @media (max-width: 780px) {
   .topbar,
   .hero,
@@ -250,5 +567,33 @@ h2 {
 
   .product-grid {
     grid-template-columns: 1fr;
+  }
+
+  .admin-page {
+    padding-top: 24px;
+  }
+
+  .admin-header,
+  .admin-grid,
+  .recommendation-footer {
+    align-items: stretch;
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .admin-stat {
+    min-width: 0;
+  }
+
+  .recommendation-data {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .recommendation-footer .form-actions {
+    justify-content: stretch;
+  }
+
+  .recommendation-footer .admin-button {
+    flex: 1;
   }
 }

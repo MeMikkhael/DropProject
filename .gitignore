@@ -10,3 +10,7 @@ build/
 logs/
 .DS_Store
 Thumbs.db
+
+# Documentacao pessoal e configuracao local do Obsidian
+docs/acompanhamento.md
+docs/.obsidian/
