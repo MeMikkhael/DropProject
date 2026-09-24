@@ -3,6 +3,7 @@ import express from "express";
 import cors from "cors";
 import helmet from "helmet";
 import morgan from "morgan";
+import { pool } from "./db.js";
 
 // 1) Criamos o servidor Express
 const app = express();
@@ -65,7 +66,23 @@ app.get("/api/overview", (request, response) => {
   response.json(buildOverviewPayload());
 });
 
-// 7) Inicia o servidor na porta escolhida
+//7( Rota para buscar os produtos do banco de dados
+app.get("/api/products", async (request, response) => {
+  try {
+    const result = await pool.query("SELECT * FROM products");
+
+    response.json(result.rows);
+  } catch (error) {
+    console.error("Erro ao buscar produtos:", error);
+
+    response.status(500).json({
+      error: "Erro ao buscar produtos"
+    });
+  }
+});
+
+// 8) Inicia o servidor na porta escolhida
 app.listen(port, () => {
   console.log(`FastTrack API rodando em http://localhost:${port}`);
 });
+
